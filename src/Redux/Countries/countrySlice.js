@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { countries, states } from "./countryDataService";
+import { cities, countries, states } from "./countryDataService";
 
 
 const countrySlice = createSlice({
@@ -12,9 +12,6 @@ const countrySlice = createSlice({
     isError: false,
     isSuccess: false,
     errorMessage:"",
-    isLoadingStates: false,
-    isErrorStates: false,
-    isSuccessStates: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -37,9 +34,30 @@ const countrySlice = createSlice({
       state.errorMessage = action.payload
     })
     .addCase(statesDisplay.pending,(state)=>{
-      state.isLoadingStates = true;
-      state.isErrorStates = false;
-      state.isSuccessStates = false
+      state.isLoading = true;
+      state.isError = false;
+      state.isSuccess = false
+    })
+    .addCase(statesDisplay.fulfilled,(state,action)=>{
+      state.states = action.payload
+      state.isSuccess = true;
+      state.isLoading = false;
+      state.isError = false;
+    })
+    .addCase(statesDisplay.rejected,(state,action)=>{
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = true;
+      state.errorMessage = action.payload
+    })
+    .addCase(citiesDisplay.pending,(state,action)=>{
+      state.isLoading = true;
+      state.isError = false;
+      state.isSuccess = false;
+    })
+    .addCase(citiesDisplay.fulfilled,(state,action)=>{
+      state.isSuccess = true;
+      state.cities = action.payload;
     })
   },
 });
@@ -55,6 +73,14 @@ export const countryDisplay = createAsyncThunk("COUNTRY/DISPLAY", async () => {
 export const statesDisplay = createAsyncThunk("STATES/DISPLAY", async () => {
   try {
     return await states()
+  } catch (error) {
+    console.log(error.message,"error")
+  }
+})
+
+export const citiesDisplay = createAsyncThunk("CITIES/DISPLAY", async () => {
+  try {
+    return await cities()
   } catch (error) {
     console.log(error.message,"error")
   }

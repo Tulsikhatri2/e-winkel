@@ -7,6 +7,10 @@ export const countries = async () => {
 
 export const states = async () => {
     const response = await axios.get("https://node-js-wse4.onrender.com/common/states/101");
-    console.log(response,"states data")
-    // console.log(response.data.data)
+    return response.data.data
+}
+
+export const cities = async () => {
+    const response = await axios.get("https://node-js-wse4.onrender.com/common/cities/4039")
+    return response.data.data
 }

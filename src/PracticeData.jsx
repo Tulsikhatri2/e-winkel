@@ -1,36 +1,56 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { countryDisplay, statesDisplay } from "./Redux/Countries/countrySlice";
+import React from 'react';
+import Popup from 'reactjs-popup';
 
-const PracticeData = () => {
-  const { countries } = useSelector((state) => state.country);
-
-  console.log(countries, "countriesInfo");
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(statesDisplay())
-    // dispatch(countryDisplay());
-  }, []);
-
-  return (
-    <div>
-      <button onClick={() => console.log(countries, "countries Data")}>
-        show countries
-      </button>
-      <select>
-        {countries.map((item) => {
-          return (
-            <>
-              <option value={item.name} key={item.id}>
-                {item.name}
-              </option>
-            </>
-          );
-        })}
-      </select>
-    </div>
-  );
+export const PracticeData = () => {
+  return(
+    <div className='practiceData'>
+  <Popup
+    trigger={<button className="button"> Open Modal </button>}
+    modal
+    nested
+  >
+    {close => (
+      <div className="modal">
+        <button className="close" onClick={close}>
+          &times;
+        </button>
+        <div className="header"> Modal Title </div>
+        <div className="content">
+          {' '}
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, a nostrum.
+          Dolorem, repellat quidem ut, minima sint vel eveniet quibusdam voluptates
+          delectus doloremque, explicabo tempore dicta adipisci fugit amet dignissimos?
+          <br />
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur sit
+          commodi beatae optio voluptatum sed eius cumque, delectus saepe repudiandae
+          explicabo nemo nam libero ad, doloribus, voluptas rem alias. Vitae?
+        </div>
+        <div className="actions">
+          {/* <Popup
+            trigger={<button className="button"> Trigger </button>}
+            position="top center"
+            nested
+          >
+            <span>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae
+              magni omnis delectus nemo, maxime molestiae dolorem numquam
+              mollitia, voluptate ea, accusamus excepturi deleniti ratione
+              sapiente! Laudantium, aperiam doloribus. Odit, aut.
+            </span>
+          </Popup> */}
+          <button
+            className="button"
+            onClick={() => {
+              console.log('modal closed ');
+              close();
+            }}
+          >
+            close modal
+          </button>
+        </div>
+      </div>
+    )}
+  </Popup>
+  </div>
+  )
 };
-
-export default PracticeData;
