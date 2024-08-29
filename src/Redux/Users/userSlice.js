@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { emailVerification, forgotPassword, userLogin, userSignup } from "./userDataService";
+import { emailVerification, forgotPassword, userDataDisplay, userLogin, userSignup } from "./userDataService";
 
 const userSlice = createSlice({
   name: "user",
@@ -11,8 +11,39 @@ const userSlice = createSlice({
     isError: false,
     isSuccess: false,
     errorMessage: "",
+    isVerification:false,
+    emailVerificationMessage:"",
+    allUsersData : [],
+    isUser:false,
+    isProduct:false,
+    isCategory:false
   },
-  reducers: {},
+  reducers: {
+    usersInfo:(state,action)=>{
+      return{
+        ...state,
+        isUser : action.payload,
+        isProduct:false,
+        isCategory:false
+      }
+    },
+    productsInfo:(state,action)=>{
+      return{
+        ...state,
+        isProduct:action.payload,
+        isUser:false,
+        isCategory:false
+      }
+    },
+    categoryInfo:(state,action)=>{
+      return{
+        ...state,
+        isCategory:action.payload,
+        isProduct:false,
+        isUser:false
+      }
+    }
+  },
   extraReducers:(builder)=>{
     builder
     .addCase(loginUser.pending,(state,action)=>{
@@ -23,6 +54,7 @@ const userSlice = createSlice({
     .addCase(loginUser.fulfilled,(state,action)=>{
       state.userLoginData = action.payload
       state.userToken = action.payload?.token
+      
       state.isSuccess = true;
       state.isloading = false;
       state.isError = false;
@@ -49,6 +81,40 @@ const userSlice = createSlice({
       state.isSuccess = false;
       state.isError = true;
       state.errorMessage = action.payload
+    })
+    .addCase(emailVerificationProcess.pending,(state,action)=>{
+      state.isloading = true;
+      state.isSuccess = false;
+      state.isError = false
+    })
+    .addCase(emailVerificationProcess.fulfilled,(state,action)=>{
+      console.log(action.payload,"+++")
+      state.isloading = false;
+      state.isError = false;
+      state.isVerification = true;
+      state.emailVerificationMessage = action.payload
+    })
+    .addCase(emailVerificationProcess.rejected,(state,action)=>{
+      state.isloading = false;
+      state.isSuccess = false;
+      state.isError = true;
+      state.errorMessage = action.payload
+    })
+    .addCase(userDisplay.pending,(state,action)=>{
+      state.isloading = true;
+      state.isSuccess = false;
+      state.isError = false
+    })
+    .addCase(userDisplay.fulfilled,(state,action)=>{
+      state.isloading = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.allUsersData = action.payload
+    })
+    .addCase(userDisplay.rejected,(state,action)=>{
+      state.isloading = false;
+      state.isSuccess = false;
+      state.isError = true;
     })
   }
 });
@@ -88,13 +154,25 @@ export const userPasswordForgot = createAsyncThunk(
 
 export const emailVerificationProcess = createAsyncThunk(
   "USER/EMAIL/VERIFICATION",
-  async (token,id) => {
+  async (verificationData) => {
     try {
-      return await emailVerification(token,id)
+      return await emailVerification(verificationData)
     } catch (error) {
       console.log(error.message,"verification error")
     }
   }
 )
 
+export const userDisplay = createAsyncThunk(
+  "USER/DISPLAY",
+  async (token) => {
+    try {
+      return await userDataDisplay(token)
+    } catch (error) {
+      console.log(error.message,"user data error")
+    }
+  }
+)
+
+export const {usersInfo, productsInfo, categoryInfo} = userSlice.actions
 export default userSlice.reducer;

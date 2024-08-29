@@ -14,7 +14,11 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
 
   const { countries, states, cities } = useSelector((state) => state.country);
-  const {isloading,isSuccess} = useSelector(state=>state.user)
+  const {isloading,isSuccess,userSignupData} = useSelector(state=>state.user)
+  const verificationData = {
+    token: userSignupData?.emailVerificationTOken,
+    id:userSignupData?.id
+  }
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -24,7 +28,9 @@ const Signup = () => {
     dispatch(statesDisplay())
   }, []);
 
-  {isSuccess?navigate("/emailVerification") :<p></p> }
+  {isSuccess?
+    navigate(`/emailVerification/${verificationData?.token}/${verificationData.id}`)
+    :<p></p> }
   return (
     <>
       <Box className="loginBackground">

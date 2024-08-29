@@ -1,57 +1,94 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import logo from "../Assets/logo.PNG"
-import ListItemText from '@mui/material/ListItemText';
+import React from "react";
+import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import logo from "../Assets/logo.PNG";
+import { Button } from "@mui/material";
+import { categoryInfo, productsInfo, userDisplay, usersInfo } from "../Redux/Users/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import UsersData from "./UsersData";
+import ProductData from "./ProductData";
+import CategoryData from "./CategoryData";
 
-const drawerWidth = 180;
-
-export default function ClippedDrawer() {
+const UserDashboard = () => {
+  const dispatch = useDispatch();
+  const {userToken,allUsersData, isUser,isProduct,isCategory} = useSelector(state=>state.user)
+  console.log(allUsersData,"users data from dashboard")
   return (
     <Box className="dashboard">
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} >
-        <Toolbar sx={{ backgroundColor:"white" }} className="nav">
-          <img src={logo} width="7%" height="80%" style={{marginLeft:"5vw"}}/>
-          <Box className="buttons">
+      <Box className="dashboardNav">
+        <AppBar
+          position="fixed"
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <Toolbar sx={{ backgroundColor: "white" }} className="nav">
+            <img
+              src={logo}
+              width="7%"
+              height="80%"
+              style={{ marginLeft: "5vw" }}
+            />
+          </Toolbar>
+        </AppBar>
+
+        <Box className="dashboardDetails">
+          <Box className="sideDrawer">
+            <p
+              onClick={() => {
+                dispatch(userDisplay(userToken));
+                dispatch(usersInfo(true))
+              }}
+            >
+              Users
+            </p>
+
+            <p
+            onClick={()=>{
+              dispatch(categoryInfo(true))
+            }}>Categories</p>
+
+            <p
+            onClick={()=>{
+              dispatch(productsInfo(true))
+            }}>Products</p>
+
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "red",
+                fontFamily: "Laila, serif",
+                fontWeight: "bold",
+                marginTop: "3vh",
+                "&:hover": {
+                  backgroundColor: "#C4C4C4",
+                  color: "red",
+                  fontWeight: "bold",
+                },
+              }}
+            >
+              Logout
+            </Button>
           </Box>
-        </Toolbar>
-        
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box', boxShadow:"0px 0px 1vh black",
-            fontFamily:"Laila, serif"
-           },
-        }}
-      >
-        <Toolbar />
-        <Box >
-          <List>
-            {['Users', 'Category', 'Products'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                <ListItemText primary={text} 
-                onClick={()=>{
-                    
-                }}/>
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+          <Box>
+            {isUser?(
+              <>
+              <UsersData users={allUsersData}/>
+              </>
+            ):
+            (isProduct?(<>
+            <ProductData/>
+            </>):
+            (isCategory?(
+              <>
+              <CategoryData/>
+              </>
+            ):(<></>)))}
+            
+          </Box>
         </Box>
-      </Drawer>
-    </Box>
+      </Box>
     </Box>
   );
-}
+};
+
+export default UserDashboard;
