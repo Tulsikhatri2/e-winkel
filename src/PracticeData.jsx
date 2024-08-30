@@ -1,34 +1,27 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { userDisplay } from './Redux/Users/userSlice'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deletingUser, singleData, userDisplay } from "./Redux/Users/userSlice";
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { CiEdit } from "react-icons/ci";
+import { RiDeleteBin2Line } from "react-icons/ri";
+import { productsDataDisplay } from "./Redux/Products/productSlice";
+import { singleCategoryDisplay } from "./Redux/Category/categoryDataService";
+import { singleCategoryData } from "./Redux/Category/categorySlice";
 
 const PracticeData = () => {
-
-  const dispatch = useDispatch()
-  const {userToken} = useSelector(state=>state.user)
-  console.log(userToken,"from practice")
+  const dispatch = useDispatch();
+  const { userToken, singleUserData } = useSelector((state) => state.user);
+  console.log(singleUserData, "from practice");
   return (
     <div>
       <button onClick={()=>{
-        dispatch(userDisplay(userToken))
-      }}>User Data</button>
-      {/* <table>
-        <thead>
-          <th>
-            <td>ID</td>
-            <td>Name</td>
-            <td>Email</td>
-          </th>
-        </thead>
-        <tbody>
-          {
+        dispatch(singleCategoryData(userToken))
+      }
+      }>
+        single category Data
+      </button>
+      </div>
+  );
+};
 
-          }
-        </tbody>
-      </table> */}
-
-    </div>
-  )
-}
-
-export default PracticeData
+export default PracticeData;

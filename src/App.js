@@ -10,11 +10,13 @@ import ForgotPassword from './LoginRegister/ForgotPassword';
 import UserDashboard from './Dashboard/UserDashboard';
 import PracticeData from './PracticeData';
 import EmailVerification from './LoginRegister/EmailVerification';
+import CreateCategory from './Category/CreateCategory';
+import SingleUserDetails from './Dashboard/SingleUserDetails';
+import SingleCategoryData from './Category/SingleCategoryData';
 
 
 
 function App() {
-  const navigate = useNavigate()
   return (
     <div>
       <ToastContainer/>
@@ -23,9 +25,12 @@ function App() {
         <Route path="/loginUser" element={<LoginUser/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/practice" element={<PracticeData/>}/>
-        <Route path="/forgotPassword" element = {<ForgotPassword/>}/>
-        <Route path="/userDashboard" element={<UserDashboard/>}/>
+        <Route path="/forgot-password" element = {<ForgotPassword/>}/>
+        <Route path="/dashboard" element={<UserDashboard/>}/>
         <Route path="/emailVerification/:token/:id" element={<EmailVerification/>}/>
+        <Route path="/createCategory" element={<CreateCategory/>}/>
+        <Route path="/singleUserDetails" element={<SingleUserDetails/>}/>
+        <Route path="/singleCategoryData" element={<SingleCategoryData/>}/>
       </Routes>
     </div>
   );

@@ -16,7 +16,7 @@ const LoginUser = () => {
   const navigate = useNavigate();
 
   if (userToken) {
-    navigate("/userDashboard")
+    navigate("/dashboard")
   }
 
   return (

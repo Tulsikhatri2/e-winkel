@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,11 +9,15 @@ import { useDispatch, useSelector } from "react-redux";
 import UsersData from "./UsersData";
 import ProductData from "./ProductData";
 import CategoryData from "./CategoryData";
+import { displayingCategories } from "../Redux/Category/categorySlice";
 
 const UserDashboard = () => {
   const dispatch = useDispatch();
   const {userToken,allUsersData, isUser,isProduct,isCategory} = useSelector(state=>state.user)
-  console.log(allUsersData,"users data from dashboard")
+  const {allCategoryData} = useSelector(state=>state.category)
+
+
+  // console.log(allUsersData,"users data from dashboard")
   return (
     <Box className="dashboard">
       <Box className="dashboardNav">
@@ -44,6 +48,7 @@ const UserDashboard = () => {
 
             <p
             onClick={()=>{
+              dispatch(displayingCategories(userToken))
               dispatch(categoryInfo(true))
             }}>Categories</p>
 
@@ -72,7 +77,7 @@ const UserDashboard = () => {
           <Box>
             {isUser?(
               <>
-              <UsersData users={allUsersData}/>
+              <UsersData users={allUsersData} userToken={userToken}/>
               </>
             ):
             (isProduct?(<>
@@ -80,7 +85,7 @@ const UserDashboard = () => {
             </>):
             (isCategory?(
               <>
-              <CategoryData/>
+              <CategoryData categories={allCategoryData}/>
               </>
             ):(<></>)))}
             

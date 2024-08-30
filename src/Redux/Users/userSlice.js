@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { emailVerification, forgotPassword, userDataDisplay, userLogin, userSignup } from "./userDataService";
+import { deleteUser, emailVerification, forgotPassword, singleUserData, userDataDisplay, userLogin, userSignup } from "./userDataService";
 
 const userSlice = createSlice({
   name: "user",
@@ -14,6 +14,7 @@ const userSlice = createSlice({
     isVerification:false,
     emailVerificationMessage:"",
     allUsersData : [],
+    singleUserData:{},
     isUser:false,
     isProduct:false,
     isCategory:false
@@ -116,6 +117,22 @@ const userSlice = createSlice({
       state.isSuccess = false;
       state.isError = true;
     })
+    .addCase(singleData.pending,(state,action)=>{
+      state.isloading = true;
+      state.isSuccess = false;
+      state.isError = false;
+    })
+    .addCase(singleData.fulfilled,(state,action) => {
+      state.isloading = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.singleUserData = action.payload
+    })
+    .addCase(singleData.rejected,(state,action) => {
+      state.isloading = false;
+      state.isSuccess = false;
+      state.isError = true;
+    })
   }
 });
 
@@ -170,6 +187,28 @@ export const userDisplay = createAsyncThunk(
       return await userDataDisplay(token)
     } catch (error) {
       console.log(error.message,"user data error")
+    }
+  }
+)
+
+export const deletingUser = createAsyncThunk(
+  "USER/DELETE",
+  async(deleteInfo) => {
+    try {
+      return await deleteUser(deleteInfo)
+    } catch (error) {
+      console.log(error.message,"user deleting error")
+    }
+  }
+)
+
+export const singleData = createAsyncThunk(
+  "SINGLE/USER",
+  async(userData)=>{
+    try {
+      return await singleUserData(userData)
+    } catch (error) {
+    
     }
   }
 )

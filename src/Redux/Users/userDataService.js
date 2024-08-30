@@ -26,6 +26,26 @@ export const userDataDisplay = async (token) =>{
             "Authorization" : "Bearer " + token
         }
     })
-    console.log(response.data.data)
     return response.data.data
+}
+
+export const deleteUser = async (deleteInfo) => {
+    const {id,token} = deleteInfo
+    const response = await axios.delete(`https://node-js-wse4.onrender.com/user/${id}`,{
+        "headers":{
+            "Authorization" : "Bearer " + token
+        }
+    })
+    console.log(response,"deleting response")
+}
+
+export const singleUserData = async (userData) => {
+    const {id,token} = userData
+    const response = await axios.get(`https://node-js-wse4.onrender.com/user/${id}`,{
+        "headers":{
+            "Authorization" : "Bearer " + token
+        }
+    })
+    console.log(response,"single user response from service")
+    return response.data.user
 }
